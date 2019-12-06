@@ -1,0 +1,52 @@
+{
+  "name": "@jbbn-code-challenge/psp",
+  "version": "1.0.0",
+  "description": "Payment Service Provider - Code challenge",
+  "repository": "git@github.com:jbbn/psp.git",
+  "author": "João Bueno <joaobbn@gmail.com> (https://github.com/jbbn)",
+  "license": "MIT",
+  "main": "bin/www",
+  "bin": {
+    "psp": "./bin/www"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "lint": "find . -path ./node_modules -prune -o -name '*.js' -print0 | xargs -0 prettier-check",
+    "format": "find . -path ./node_modules -prune -o -name '*.js' -print0 | xargs -0 prettier --write",
+    "start": "node bin/www",
+    "start:dev": "nodemon --inspect=9229 bin/www",
+    "test": "NODE_ENV=test jest '\\.spec\\.js$'",
+    "test:watch": "yarn test --watch",
+    "precommit": "lint-staged",
+    "zip": "git archive -o psp.zip HEAD"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.5.0",
+    "nodemon": "^2.0.1",
+    "prettier": "^1.19.1",
+    "prettier-check": "^2.0.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
