@@ -1,5 +1,8 @@
 # Payment Service Provider
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/158908ffa2a498e8e71c/maintainability)](https://codeclimate.com/github/jbbn/psp/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/158908ffa2a498e8e71c/test_coverage)](https://codeclimate.com/github/jbbn/psp/test_coverage)
+
 ## Requirements
 
 * `yarn`

@@ -20,6 +20,7 @@
     "start:dev": "nodemon --inspect=9229 bin/www",
     "test": "NODE_ENV=test jest '\\.spec\\.js$'",
     "test:watch": "yarn test --watch",
+    "test:coverage": "yarn test --coverage",
     "precommit": "lint-staged",
     "zip": "git archive -o psp.zip HEAD"
   },
