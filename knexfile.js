@@ -1,11 +1,22 @@
 const path = require('path')
 
+const MIGRATIONS_PATH = path.join(__dirname, 'src', 'transactions')
+
+const migrations = {
+  directory: [path.join(MIGRATIONS_PATH, 'migrations')],
+}
+const seeds = {
+  directory: path.join(__dirname, 'src', 'db', 'seeds'),
+}
+
 module.exports = {
   test: {
     client: 'sqlite3',
     connection: {
       filename: './test.sqlite3',
     },
+    migrations,
+    seeds,
     useNullAsDefault: true,
   },
 
@@ -14,6 +25,8 @@ module.exports = {
     connection: {
       filename: './dev.sqlite3',
     },
+    migrations,
+    seeds,
     useNullAsDefault: true,
   },
 }
