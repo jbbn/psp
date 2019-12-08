@@ -1,9 +1,13 @@
 const path = require('path')
 
 const MIGRATIONS_PATH = path.join(__dirname, 'src', 'transactions')
+const PAYABLES_PATH = path.join(__dirname, 'src', 'payables')
 
 const migrations = {
-  directory: [path.join(MIGRATIONS_PATH, 'migrations')],
+  directory: [
+    path.join(MIGRATIONS_PATH, 'migrations'),
+    path.join(PAYABLES_PATH, 'migrations'),
+  ],
 }
 const seeds = {
   directory: path.join(__dirname, 'src', 'db', 'seeds'),
