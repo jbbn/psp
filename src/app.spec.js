@@ -8,6 +8,7 @@ const { version } = require('../package.json')
 
 const METADATA_PATH = '/'
 const TRANSACTIONS_PATH = '/transactions'
+const PAYABLES_PATH = '/payables'
 
 const transactionFixture = req =>
   Object.assign(
@@ -86,6 +87,52 @@ describe('PSP', () => {
         it('Should have an error message', async () => {
           const response = await chai.request(app).post(TRANSACTIONS_PATH)
           expect(response.body.message).toBeTruthy()
+        })
+      })
+    })
+  })
+
+  describe('Payables module', () => {
+    describe('Funds', () => {
+      beforeEach(() => {
+        return knex.migrate
+          .rollback()
+          .then(() => knex.migrate.latest())
+          .then(() => knex.seed.run())
+      })
+
+      afterEach(() => {
+        return knex.migrate.rollback()
+      })
+
+      describe('When look for payables funds totals', () => {
+        it('Should the endpoint exists', async () => {
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.status).toBe(200)
+        })
+
+        it('Responds with the available funds', async () => {
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.body).toHaveProperty('available')
+        })
+
+        it('Responds with the waiting funds', async () => {
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.body).toHaveProperty('waiting_funds')
+        })
+
+        it('Responds with the CORRECT available funds', async () => {
+          // we know the seeds, so we know the total
+          const total_available = 200
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.body.available).toBe(total_available)
+        })
+
+        it('Responds with the CORRECT waiting funds', async () => {
+          // we know the seeds, so we know the total
+          const total_waiting_funds = 175
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.body.waiting_funds).toBe(total_waiting_funds)
         })
       })
     })
