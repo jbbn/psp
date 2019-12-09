@@ -1,4 +1,7 @@
 const Payables = require('./models/Payables')
+const { preparePayable } = require('./service')
+
+const STATUS = require('./status')
 
 /**
  * Get total funds for payables
@@ -16,7 +19,30 @@ module.exports.getFundsTotals = async () => {
   )
 
   return {
-    available: funds.paid,
-    waiting_funds: funds.waiting_funds,
+    available: funds[STATUS.PAID],
+    waiting_funds: funds[STATUS.WAITING_FUNDS],
   }
+}
+
+/**
+ * Create a payable
+ * @param {Object} transaction_amount transaction amount
+ * @param {Object} transaction_payment_method transaction payment method
+ * @param {Object} transaction_id transaction unique identifier
+ * @returns {Object} the payable created
+ */
+module.exports.createPayable = async (
+  transaction_amount,
+  transaction_payment_method,
+  transaction_id
+) => {
+  let payableToBeSaved = preparePayable(
+    transaction_amount,
+    transaction_payment_method,
+    transaction_id
+  )
+
+  const payable = await Payables.query().insert(payableToBeSaved)
+
+  return payable
 }
