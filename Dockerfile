@@ -7,4 +7,4 @@ RUN yarn --pure-lockfile
 
 ADD . .
 
-CMD yarn test:watch
+CMD ["yarn", "start"]
