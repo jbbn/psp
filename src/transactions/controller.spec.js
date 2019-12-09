@@ -1,10 +1,14 @@
 const { getTransactions, createTransaction } = require('./controller')
 const Transactions = require('./models/Transactions')
+const Payables = require('../payables/models/Payables')
 
 const select = jest.fn()
-const insert = jest.fn()
-const query = jest.fn(() => ({ select, insert }))
+const TransactionInsert = jest.fn(params => params)
+const query = jest.fn(() => ({ select, insert: TransactionInsert }))
 Transactions.query = query
+
+const PayablesInsert = jest.fn(params => params)
+Payables.query = jest.fn(() => ({ insert: PayablesInsert }))
 
 describe('Transactions controller', () => {
   describe('When getting the transactions', () => {
@@ -21,14 +25,19 @@ describe('Transactions controller', () => {
       card_verification_value: '999',
     })
 
-    it('Should run the `insert` method of the model', async () => {
+    it('Runs the `insert` method of the Transaction model', async () => {
       const transaction = await createTransaction()
-      expect(insert).toHaveBeenCalled()
+      expect(TransactionInsert).toHaveBeenCalled()
+    })
+
+    it('Runs the `insert` method of the Payable model', async () => {
+      const transaction = await createTransaction()
+      expect(PayablesInsert).toHaveBeenCalled()
     })
 
     it('Should not save the Card Verification Value', async () => {
       let params = null
-      insert.mockImplementationOnce(_params => (params = _params))
+      TransactionInsert.mockImplementationOnce(_params => (params = _params))
 
       const incomming = getIncommingTransaction()
       const transaction = await createTransaction(incomming)
@@ -38,7 +47,7 @@ describe('Transactions controller', () => {
 
     it('Should not save the Card Number', async () => {
       let params = null
-      insert.mockImplementationOnce(_params => (params = _params))
+      TransactionInsert.mockImplementationOnce(_params => (params = _params))
 
       const incomming = getIncommingTransaction()
       const transaction = await createTransaction(incomming)
@@ -48,7 +57,7 @@ describe('Transactions controller', () => {
 
     it('Should save the last 4 digits of the Card Number', async () => {
       let params = null
-      insert.mockImplementationOnce(_params => (params = _params))
+      TransactionInsert.mockImplementationOnce(_params => (params = _params))
 
       const incomming = getIncommingTransaction()
       const transaction = await createTransaction(incomming)

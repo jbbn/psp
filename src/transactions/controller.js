@@ -1,4 +1,5 @@
 const Transactions = require('./models/Transactions')
+const { createPayable } = require('../payables/controller')
 
 /**
  * Get all transactions in the database
@@ -32,6 +33,13 @@ module.exports.createTransaction = async (incommingTransaction = {}) => {
   delete transactionToBeSaved.card_number
 
   const transaction = await Transactions.query().insert(transactionToBeSaved)
+
+  // create the payable for this transaction
+  const payable = await createPayable(
+    transaction.amount,
+    transaction.payment_method,
+    transaction.id
+  )
 
   return transaction
 }

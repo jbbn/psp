@@ -76,6 +76,32 @@ describe('PSP', () => {
           const fetchResponse = await chai.request(app).get(TRANSACTIONS_PATH)
           expect(fetchResponse.body).toHaveLength(3)
         })
+
+        it('Should the payable has been created for debit transation', async () => {
+          const transactionFixture = req =>
+            Object.assign(
+              {},
+              {
+                amount: 200,
+                description: 'Nerd Stickers',
+                payment_method: 'debit_card',
+                card_number: '00001111222233334444',
+                card_name: 'JOHN D SILVA',
+                card_expiration_date: '102020',
+                card_verification_value: '000',
+              },
+              req
+            )
+          const transaction = await requestCreateTransaction(
+            transactionFixture()
+          )
+
+          // sum of seeds and last creation (with business rules)
+          const total_available = 394
+
+          const response = await chai.request(app).get(PAYABLES_PATH + '/funds')
+          expect(response.body.available).toBe(total_available)
+        })
       })
 
       describe('When the validation returns an error', () => {
