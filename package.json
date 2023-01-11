@@ -30,7 +30,7 @@
     "express-async-router": "^0.1.15",
     "express-validation": "^1.0.3",
     "joi": "^14.3.1",
-    "knex": "^0.20.4",
+    "knex": "^2.4.0",
     "objection": "^2.0.3",
     "pg": "^7.14.0",
     "sqlite3": "^4.1.1",
